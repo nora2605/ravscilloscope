@@ -87,7 +87,7 @@ if (!options.skip_render) {
         ctx.fillRect(0, 0, RES_X, RES_Y);
 
         ctx.globalCompositeOperation = 'lighter';
-        drawCurve(ctx, screenspace_points.slice(start, end), 0.5);
+        drawCurve(ctx, screenspace_points.slice(start, end), 0.5, options.intensity);
 
         w_stdout.write(`Frame ${i + 1}/${Math.ceil(audio.duration * FPS)}\r`);
         await Bun.write(`${FRAMES_DIR}/frame${i.toString().padStart(max_pad, '0')}.png`, canvas.createPNGStream().read());
@@ -122,7 +122,7 @@ if (!options.no_video) {
  * @param tension Tension for the canonical splint
  * @param decay Amount of decay per sample (will apply a layer of 0x01 alpha of the background whenever cur_sample_index * acc_decay is greater than 1/255)
  */
-function drawCurve(ctx: CanvasRenderingContext2D, points: { x: number, y: number }[], tension?: number) {
+function drawCurve(ctx: CanvasRenderingContext2D, points: { x: number, y: number }[], tension: number, intensity: number) {
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     let t = tension ?? 1;
@@ -143,7 +143,7 @@ function drawCurve(ctx: CanvasRenderingContext2D, points: { x: number, y: number
             ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
         const dx = Math.abs(p2.x - p1.x);
         const dy = Math.abs(p2.y - p1.y);
-        ctx.strokeStyle = rgb2css(fg_color_fade(Math.min(1, ((RES_X + RES_Y) / 4) / (dx + dy))));
+        ctx.strokeStyle = rgb2css(fg_color_fade(Math.min(1, (intensity * (RES_X + RES_Y) / 4) / (dx + dy))));
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(p2.x, p2.y);

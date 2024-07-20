@@ -17,7 +17,8 @@ const { values, positionals } = parseArgs({
         show_after: { type: 'boolean', short: 'w' },
         fade: { type: 'string', short: 'd' },
         lineto: { type: 'boolean', short: 'p' },
-        skip_render: { type: 'boolean', short: 'k' }
+        skip_render: { type: 'boolean', short: 'k' },
+        intensity: { type: 'string', short: 't' }
     },
     strict: true,
     allowPositionals: true
@@ -43,6 +44,7 @@ FLAGS:
     --video_codec, -v   Specifies the codec to use to encode the video (must be an ffmpeg codec)
     --lineto, -p        Uses lines instead of Bezier curves to connect the points.
     --skip_render, -k   Skips rendering the frames and only generates the video from the frames directory.
+    --intensity, -t     Specifies the intensity of the oscilloscope (0.0 - 1.0)
 FFMPEG_OPTIONS:
     See the official FFMpeg documentation. Can be used to specify bitrate. Note however that the previous options still apply:
     ffmpeg -y -r <fps> -i <frames> -i <input> -c:v <video_codec> -c:a <audio_codec> \\
@@ -103,5 +105,6 @@ export default {
     fade: parseFloat(values.fade ?? '0.3'),
     ffmpeg_options: positionals,
     lineto: values.lineto ?? false,
-    skip_render: values.skip_render ?? false
+    skip_render: values.skip_render ?? false,
+    intensity: parseFloat(values.intensity ?? '0.04')
 };
