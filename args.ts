@@ -16,7 +16,8 @@ const { values, positionals } = parseArgs({
         fg_color: { type: 'string', short: 'f' },
         show_after: { type: 'boolean', short: 'w' },
         fade: { type: 'string', short: 'd' },
-        lineto: { type: 'boolean', short: 'p' }
+        lineto: { type: 'boolean', short: 'p' },
+        skip_render: { type: 'boolean', short: 'k' }
     },
     strict: true,
     allowPositionals: true
@@ -41,6 +42,7 @@ FLAGS:
     --show_after, -w    If given, opens ffplay afterwards to show result.
     --video_codec, -v   Specifies the codec to use to encode the video (must be an ffmpeg codec)
     --lineto, -p        Uses lines instead of Bezier curves to connect the points.
+    --skip_render, -k   Skips rendering the frames and only generates the video from the frames directory.
 FFMPEG_OPTIONS:
     See the official FFMpeg documentation. Can be used to specify bitrate. Note however that the previous options still apply:
     ffmpeg -y -r <fps> -i <frames> -i <input> -c:v <video_codec> -c:a <audio_codec> \\
@@ -100,5 +102,6 @@ export default {
     show_after: values.show_after ?? false,
     fade: parseFloat(values.fade ?? '0.3'),
     ffmpeg_options: positionals,
-    lineto: values.lineto ?? false
+    lineto: values.lineto ?? false,
+    skip_render: values.skip_render ?? false
 };

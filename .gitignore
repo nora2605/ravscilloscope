@@ -174,8 +174,8 @@ dist
 # Finder (MacOS) folder config
 .DS_Store
 
-# output files
+# in/output files
 *.wav
-frames/
+frames_*/
 *.mkv
 *.mp4
